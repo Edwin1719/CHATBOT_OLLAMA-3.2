@@ -1,3 +1,4 @@
 streamlit
 langchain
 langchain_ollama
+st_social_media_links
