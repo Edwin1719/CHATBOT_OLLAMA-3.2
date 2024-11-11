@@ -2,5 +2,3 @@ streamlit
 langchain
 langchain_ollama
 st_social_media_links
-fastapi==0.95.0 
-uvicorn==0.18.0
