@@ -1,6 +1,27 @@
+import threading
 import streamlit as st
+from fastapi import FastAPI
 from langchain_ollama import ChatOllama
+import uvicorn
+import requests
 from st_social_media_links import SocialMediaIcons
+
+# Configuración de FastAPI
+app = FastAPI()
+llm = ChatOllama(model="llama3.2", temperature=0)
+
+@app.get("/ask")
+async def ask_question(question: str):
+    # Llama al modelo y obtiene la respuesta
+    response = llm.invoke([("human", question)])
+    return {"answer": response.content}
+
+# Función para correr el servidor FastAPI en un hilo separado
+def run_fastapi():
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+# Correr el servidor FastAPI en un hilo
+threading.Thread(target=run_fastapi, daemon=True).start()
 
 # Definiendo la aplicación de Streamlit
 st.set_page_config(page_title="ASISTENTE VIRTUAL DATABiQ", page_icon="https://i.postimg.cc/zDgSpFj7/LOGO-DATABi-Q.png")
@@ -55,12 +76,14 @@ if prompt := st.chat_input():
     st.session_state["messages"].append({"role": "user", "content": prompt})
     st.session_state["history"].append(("human", prompt))
     st.chat_message("user").write(prompt)
-    llm = ChatOllama(model="llama3.2", temperature=0)
-    
-    response = llm.invoke(st.session_state["history"])
-    st.chat_message("assistant").write(response.content)
-    st.session_state["messages"].append({"role": "assistant", "content": response.content})
-    st.session_state["history"].append(("assistant", response.content))
+
+    # Hacer la petición a la API de FastAPI
+    response = requests.get("http://localhost:8000/ask", params={"question": prompt})
+    answer = response.json().get("answer", "No response")
+
+    st.chat_message("assistant").write(answer)
+    st.session_state["messages"].append({"role": "assistant", "content": answer})
+    st.session_state["history"].append(("assistant", answer))
 
 # Pie de página con información del desarrollador y logos de redes sociales
 st.markdown("""
