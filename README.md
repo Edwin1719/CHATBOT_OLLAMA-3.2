@@ -2,7 +2,7 @@
 
 ![texto del vínculo](https://www.linuxtricks.fr/upload/ollama-logo.png)
 
-Assistant created with Streamlit and the Langchain Ollama API, for friendly and efficient conversations with users. It uses the powerful Llama 3.2 model to generate responses based on user input and maintains a history of interactions. The application features a clean and easy-to-use interface that with links to the developer's social networks.
+Assistant created with Streamlit and Langchain Ollama API, designed for friendly and efficient conversations. Uses the Llama 3.2 model to generate expert responses in Data Science and Analysis. Operates entirely offline, ideal for any environment. Clean and easy-to-use interface.
 
 
 **KEY FEATURES:**
